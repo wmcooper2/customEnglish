@@ -7,6 +7,8 @@ name = "pypi"
 requests = "*"
 aiohttp = "*"
 pytest = "*"
+beautifulsoup4 = "*"
+google = "*"
 
 [dev-packages]
 

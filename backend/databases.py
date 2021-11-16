@@ -1,17 +1,26 @@
 """student-profiles database interface."""
 # std lib
+from pathlib import Path
+from pprint import pprint
 import sqlite3
+import sys
 from typing import List, Text, Tuple
 
 # custom
 # from backend.students import Student
-# from .students import Student
 from students import Student
+# from students import Student
+
+# print("databases.py:", __path__)
+pprint(sys.path)
+db = "backend/data/student-profiles.db"
+print("DB exists?:", Path(db).exists())
+print("Abs path:", Path(".").resolve())
 
 
 class StudentProfiles():
     def __init__(self) -> None:
-        self.connection = sqlite3.connect("data/student-profiles.db")
+        self.connection = sqlite3.connect(db)
         #self.connection.row_factory = sqlite3.Row
         self.cursor = self.connection.cursor()
         self._create_names_table()

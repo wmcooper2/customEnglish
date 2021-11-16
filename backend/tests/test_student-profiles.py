@@ -8,7 +8,12 @@ import pytest
 
 # custom
 # import backend.databases as databases
-from backend import databases
+# from backend import databases
+# import databases
+
+# print("test_student-profiles.py:", __path__)
+
+from .. import databases
 
 
 @pytest.fixture

@@ -3,6 +3,7 @@
 # std lib
 from typing import Text
 
+# print("students.py:", __path__)
 
 class Student():
     """Student class."""
