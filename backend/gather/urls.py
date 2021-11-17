@@ -6,7 +6,8 @@ import sys
 from typing import List, Text, Union
 
 # 3rd party
-from bs4 import BeautifulSoup
+import bs4
+# from bs4 import BeautifulSoup
 import requests
 
 Context = namedtuple("Context", ["grammar", "subject"])
@@ -35,12 +36,18 @@ def search_google(query: Union[Context, Text]) -> List[Text]:
 
     return urls
 
-def web_page(url: Text) -> Text:
+
+def page_soup(url: Text) -> Text:
     """Scrape web page content."""
     req = requests.get(url)
-    print("Kilobytes:", sys.getsizeof(req.text))
-#    soup = BeautifulSoup(req, 'html.parser')
+    #print("Kilobytes:", sys.getsizeof(req.text))
+    soup = bs4.BeautifulSoup(req.text, 'html.parser')
+#    print("type:", type(soup))
+    return soup
 
+
+def page_text(soup: bs4.BeautifulSoup) -> Text:
+    return soup.get_text(strip=True)
 
 
 
@@ -54,5 +61,8 @@ if __name__ == "__main__":
     #print(f"Search {query}:",urls)
 
     for url in list(urls)[:1]:
-        web_page(url)
+        html = page_soup(url)
+        text = page_text(html)
+        print("URL:", url)
+        print("raw text:", text[:100])
         #scrape urls
