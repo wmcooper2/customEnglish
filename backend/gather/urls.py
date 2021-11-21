@@ -22,7 +22,7 @@ def search_google(query: Union[Context, Text]) -> List[Text]:
         from googlesearch import search
     except ImportError:
         print("No module named 'google' found")
-     
+
     urls = set()
     print("is Context?:", isinstance(query, Context))
     if isinstance(query, Context):
