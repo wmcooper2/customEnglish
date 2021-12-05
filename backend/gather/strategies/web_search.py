@@ -1,22 +1,27 @@
-"""Internet Searching Strategies"""
+"""Web Searching Strategies."""
 
 # std lib
 from __future__ import annotations
 from abc import ABC, abstractmethod
 from collections import namedtuple
 import functools
-from typing import List, Text, Union
+from pprint import pprint
+from typing import List, Text
 
 # 3rd party
 import bs4
 import requests
+try:
+    from googlesearch import search
+except ImportError:
+    print("No module named 'google' found")
 
 
 Context = namedtuple("Context", ["grammar", "subject"])
 
 
-class InternetSearch():
-    """Search the Internet"""
+class WebSearch():
+    """Search the Web"""
 
     def __init__(self, strategy: Strategy) -> None:
         self._strategy = strategy
@@ -45,16 +50,11 @@ class Strategy(ABC):
 
 
 class GoogleStrategy(Strategy):
-    """Perform Internet search using Google."""
+    """Perform Web search using Google."""
 
     def search(self, query: List[Text]) -> List[Text]:
         """Search Google for 'query'."""
         assert isinstance(query, list), "Search query must be a list of strings."
-
-        try:
-            from googlesearch import search
-        except ImportError:
-            print("No module named 'google' found")
 
         urls = set()
         if isinstance(query, List):
@@ -65,10 +65,10 @@ class GoogleStrategy(Strategy):
             for url in search(query, tld="com", num=10, stop=10, pause=2):
                 urls.add(url)
 
-        return urls
+        return list(urls)
 
 
-class TemplateStrategy(Strategy):
+class StrategyTemplate(Strategy):
     """Template... change to whatever strategy."""
 
     def search(self, query: List[Text]) -> List:
@@ -78,7 +78,8 @@ class TemplateStrategy(Strategy):
 
 if __name__ == "__main__":
 
-    google = InternetSearch(GoogleStrategy())
+    print("="*9, __file__)
+    google = WebSearch(GoogleStrategy())
     # res = google.search(Context("I like", "birds"))
     res = google.search(["I like", "birds"])
-    print(res)
+    pprint(res)
