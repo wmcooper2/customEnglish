@@ -1,8 +1,8 @@
-"""Text normalization strategies."""
+"""Text normalization pipeline and functions."""
 
 # std lib
 import functools
-from string import whitespace
+from string import whitespace, punctuation
 from typing import Any, Callable, List, Optional, Text
 
 
@@ -27,10 +27,35 @@ def normalize(text: Text, functions: List[Callable[..., Any]]) -> Optional[Calla
     return None
 
 
+def remove_blank_elements(data: List[Text]) -> List[Text]:
+    """Remove empty elements from the list."""
+
+    return [element for element in data if element]
+
+
 def remove_html_character_entities(data: List[Text]) -> List[Text]:
     """Remove html character entities."""
 
     return [line.replace('\xa0', ' ') for line in data]
+
+
+def remove_newline_chars(data: List[Text]) -> List[Text]:
+    """Remove all '\\n' from the data."""
+
+    string = str(data)
+    string.replace(r"\n", "")
+    return string.split()
+
+
+def remove_punctuation(data: List[Text]) -> List[Text]:
+    """Remove all punctuation found in string.punctuation."""
+
+    cleaned = []
+    string = str(data)
+    for letter in string:
+        if letter not in punctuation:
+            cleaned.append(letter)
+    return ("".join(cleaned)).split(" ")
 
 
 def remove_whitespace(data: List[Text]) -> List[Text]:
@@ -47,9 +72,7 @@ def strip_lines(data: List[Text]) -> List[Text]:
 
 def tokenize(data: Text) -> List[Text]:
     """Tokenize data into words."""
-    result = data.split(" ")
-
-    return result
+    return data.split(" ")
 
 
 if __name__ == "__main__":
@@ -68,9 +91,12 @@ if __name__ == "__main__":
               and cats!!! lots and lots of cats!???"""
 
     pipeline = [
-#         remove_html_character_entities,
+        remove_blank_elements,
+        remove_punctuation,
+        remove_html_character_entities,
+        remove_newline_chars,
         strip_lines,
         remove_whitespace,
         tokenize]
     result = normalize(TEXT, pipeline)
-    print(result)
+    print(" ".join(result))
